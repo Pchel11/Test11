@@ -9,8 +9,8 @@ print(PORT)
 
 class MyHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
-         x = 1
-         
+        x = 1
+
         content = f"""
         <html>
         <head><title>XXX</title><head>
