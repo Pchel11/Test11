@@ -9,11 +9,15 @@ print(PORT)
 
 class MyHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
-        content = """
+        content = f"""
         <html>
         <head><title>XXX</title><head>
-        <body>Hello world!</body>
-        </html>
+        <body>
+        <h1>Hello world!</h1>
+        <p>path: {self.path}</p>
+        <p>x: {self.path}</p>
+        </body>
+        </html> 
         """
 
         self.send_response(200)
