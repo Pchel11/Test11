@@ -8,7 +8,19 @@ print(PORT)
 
 
 class MyHandler(SimpleHTTPRequestHandler):
-    pass
+    def do_GET(self):
+        content = """
+        <html>
+        <head><title>XXX</title><head>
+        <body>Hello world!</body>
+        </html>
+        """
+
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.send_header("Conten-length", str(len(content)))
+        self.end_headers()
+        self.wfile.write(content.encode())
 
 
 if __name__ == "__main__":
