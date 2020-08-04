@@ -5,11 +5,11 @@ import settings
 
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        self.path = self.build_path()
+        path = self.build_path()
 
-        if self.path == "/":
+        if path == "/":
             self.handle_root()
-        elif self.path == "/hello/":
+        elif path == "/hello/":
             self.handle_hello()
         else:
             self.handle_404()
@@ -31,7 +31,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.respond(content)
 
     def handle_404(self):
-        msg = """NOT FOUND!!!!!!!!!"""
+        msg = """NOT FOUND!!!!!!!!"""
 
         self.respond(msg, code=404, content_type="text/plain")
 

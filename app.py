@@ -1,8 +1,7 @@
 import socketserver
 
 import settings
-
-from srv import MyHttp
+from server import MyHttp
 
 if __name__ == "__main__":
     with socketserver.TCPServer(("", settings.PORT), MyHttp) as httpd:
