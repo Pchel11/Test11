@@ -20,12 +20,12 @@ class MyHttp(SimpleHTTPRequestHandler):
     def handle_hello(self):
         content = f"""
         <html>
-        <head><title>XXX</title></head>
+        <head><title>Hello Page</title></head>
         <body>
         <h1>Hello world!</h1>
         <p>path: {self.path}</p>
         </body>
-        </html> 
+        </html>
         """
 
         self.respond(content)
@@ -39,6 +39,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_response(code)
         self.send_header("Content-type", content_type)
         self.send_header("Content-length", str(len(message)))
+        self.send_header("Cache-control", f"max-age={settings.CACHE_AGE}")
         self.end_headers()
         self.wfile.write(message.encode())
 
