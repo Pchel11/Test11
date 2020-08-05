@@ -11,6 +11,10 @@ class MyHttp(SimpleHTTPRequestHandler):
             self.handle_root()
         elif path == "/hello/":
             self.handle_hello()
+        elif path == "/style/":
+            self.handle_style()
+        elif path == "/image/":
+            self.handle_image()
         else:
             self.handle_404()
 
@@ -30,6 +34,26 @@ class MyHttp(SimpleHTTPRequestHandler):
 
         self.respond(content)
 
+    def handle_style(self):
+        css_file = settings.PROJECT_DIR / "styles" / "style.css"
+        if not css_file.exists():
+            return self.handle_404()
+
+        with css_file.open("r") as fp:
+            css = fp.read()
+
+        self.respond(css, content_type="text/css")
+
+    def handle_image(self):
+        image_file = settings.PROJECT_DIR / "images" / "xxx.png"
+        if not image_file.exists():
+            return self.handle_404()
+
+        with image_file.open("rb") as fp:
+            img = fp.read()
+
+        self.respond(img, content_type="image/png")
+
     def handle_404(self):
         msg = """NOT FOUND!!!!!!!!"""
 
@@ -41,7 +65,10 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_header("Content-length", str(len(message)))
         self.send_header("Cache-control", f"max-age={settings.CACHE_AGE}")
         self.end_headers()
-        self.wfile.write(message.encode())
+
+        if isinstance(message, str):
+            message = message.encode()
+        self.wfile.write(message)
 
     def build_path(self) -> str:
         result = self.path
