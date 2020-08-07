@@ -15,6 +15,8 @@ class MyHttp(SimpleHTTPRequestHandler):
             self.handle_style()
         elif path == "/image/":
             self.handle_image()
+        elif path == "/image1/":
+            self.handle_image1()
         else:
             self.handle_404()
 
@@ -51,8 +53,16 @@ class MyHttp(SimpleHTTPRequestHandler):
 
         with image_file.open("rb") as fp:
             img = fp.read()
+            self.respond(img, content_type="image/png")
 
-        self.respond(img, content_type="image/png")
+    def handle_image1(self):
+        image_file = settings.PROJECT_DIR / "images" / "yyy.png"
+        if not image_file.exists():
+            return self.handle_404()
+
+        with image_file.open("rb") as fp:
+            img = fp.read()
+            self.respond(img, content_type="image/png")
 
     def handle_404(self):
         msg = """NOT FOUND!!!!!!!!"""
@@ -68,7 +78,7 @@ class MyHttp(SimpleHTTPRequestHandler):
 
         if isinstance(message, str):
             message = message.encode()
-        self.wfile.write(message)
+            self.wfile.write(message)
 
     def build_path(self) -> str:
         result = self.path
