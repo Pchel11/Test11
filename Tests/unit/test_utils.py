@@ -1,13 +1,55 @@
-from utils import normilize_path
+import pytest
+
+from errors import NotFound
+from utils import normalize_path
+from utils import read_static
+from utils import to_bytes
 
 
-def test_normilize_path():
+@pytest.mark.unit
+def test_normalize_path():
+    data_set = {
+        "": "/",
+        "/": "/",
+        "hello": "hello/",
+        "hello/": "hello/",
+    }
 
-    for i in range(4):
-            t = test_data[i]
-                e = expected_data[i]
-                    g = normalize_path(t)
-                        assert e == g, f"mismatch: for normalize_path ('{t}') expected '{e}', got '{g}'"
-    for :
-        got = normalize_path(path)
-        assert got == expected, f"path '{path}' normalized to '{got}', while '{expected}' expected"
+    for input_data, expected_data in data_set.items():
+        output_data = normalize_path(input_data)
+
+        assert \
+            output_data == expected_data, \
+            f"path `{input_data}` normalized to `{output_data}`," \
+            f" while `{expected_data}` expected"
+
+
+@pytest.mark.unit
+def test_to_bytes():
+    input_data_set = ["x", b"x"]
+    expected_data_set = [b"x", b"x"]
+
+    for i in range(len(input_data_set)):
+        input_data = input_data_set[i]
+        expected_data = expected_data_set[i]
+        output_data = to_bytes(input_data)
+
+        error = (
+            f"failed to convert {input_data!r} to bytes:"
+            f" got {output_data!r}, while expected {expected_data!r}"
+        )
+
+        assert output_data == expected_data, error
+
+
+@pytest.mark.unit
+def test_read_static():
+    content = read_static("test.txt")
+    assert content == b"test\n"
+
+    try:
+        read_static("xxx")
+    except NotFound:
+        pass
+    else:
+        raise AssertionError("file exists")
