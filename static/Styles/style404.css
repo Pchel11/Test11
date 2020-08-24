@@ -1,0 +1,25 @@
+body {
+	background-color : white;
+	background-image : url(/img/404error3.png/);
+	z-index: 1;
+}
+a.button_home {
+  position: absolute;
+  left: 678;
+  bottom: 5;
+  width:82px;
+  height:30px;
+  font-size: 25;
+  display: inline-block;
+  color: orange;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 2px solid;
+  border-radius: 1px;
+  transition: 0.2s;
+}
+a.button_home:hover { background: black; }
+a.button_home:active { background: white; }

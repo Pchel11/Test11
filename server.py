@@ -26,30 +26,37 @@ def get_path_with_file(url) -> tuple:
 def get_content_type_from_file(file_path: str) -> str:
     if not file_path:
         return "text/html"
-    ext = file_path.split(".")[1].lower()
-    content_type_by_extension = {
-        "gif": "image/gif",
-        "jpeg": "image/jpeg",
-        "jpg": "image/jpeg",
-        "png": "image/png",
-        "svg": "image/svg+xml",
-    }
+    try:
+        ext = file_path.split(".")[1].lower()
+        content_type_by_extension = {
+            "gif": "image/gif",
+            "jpeg": "image/jpeg",
+            "jpg": "image/jpg",
+            "png": "image/png",
+            "svg": "image/svg+xml",
+            "ico": "image/x-icon",
+        }
 
-    content_type = content_type_by_extension[ext]
-    return content_type
+        content_type = content_type_by_extension[ext]
+        return content_type
+    except IndexError:
+        pass
 
 
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        path, file_path = get_path_with_file(self.path)
+        path, \
+        file_path = get_path_with_file(self.path)
         content_type = get_content_type_from_file(file_path)
-
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
             "/style/": [self.handle_static, ["styles/style.css", "text/css"]],
+            "/style404/": [self.handle_static, ["styles/style404.css", "text/css"]],
+            "/bg/": [self.handle_static, ["images/back.jpg", "image/jpg"]],
+            # "/pchel/": [self.handle_static, ["images/pchel.png", "image/png"]],
 
-            "/xxx/": [self.handle_static, [f"images/{file_path}", content_type]],
-
+            "/img/": [self.handle_static, [f"images/{file_path}", content_type]],
+            # "/imgg/": [self.handle_static, ["images/imgg.jpg", "image/jpg"]],
             "/hello/": [self.handle_hello, []],
             "/0/": [self.handle_zde, []],
         }
@@ -58,7 +65,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             handler, args = endpoints[path]
             handler(*args)
         except (NotFound, KeyError):
-            self.handle_404()
+            self.handle_static("404.html", "text/html")
         except MethodNotAllowed:
             self.handle_405()
         except Exception:

@@ -1,21 +1,69 @@
 body {
-	background-color : blue;
-}
-.Second {font-size : 55;
-	font-family : Arial;
-	position: absolute;
-	 left:500;
-	 top:500;
+	background-color : white;
+	background-image : url(/img/back.jpg/);
+	z-index: 1;
 }
 .Img1 {
-    max-width: 1000px;
+    width: 1000px;
+    height: 500px;
     position: absolute;
      left:20;
      top:20;
 }
-.Img2 {
-    max-width: 600px;
-    position: absolute;
-     right:20;
-     top:20;
+.Second {font-size : 55;
+	font-family : Arial;
+	color : white;
+	position: absolute;
+	 left:25;
+	 top:25;
 }
+.Pchela {
+position:relative;
+top:25;
+left:200;
+z-index:2;
+height:100px;
+width:100px;
+}
+a.knopka_rules {
+  position: absolute;
+  right: 50;
+  top: 50;
+  width:150px;
+  height:40px;
+  font-size: 30;
+  display: inline-block;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 2px solid;
+  border-radius: 1px;
+  transition: 0.2s;
+}
+a.knopka_rules:hover { background: black; }
+a.knopka_rules:active { background: white; }
+
+a.knopka_VK {
+  position: absolute;
+  right: 50;
+  top: 130;
+  width:150px;
+  height:40px;
+  font-size: 30;
+  display: inline-block;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 2px solid;
+  border-radius: 1px;
+  transition: 0.2s;
+}
+a.knopka_VK:hover { background: black; }
+a.knopka_VK:active { background: white; }
+

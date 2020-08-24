@@ -10,6 +10,7 @@ httpie = "*"
 django = "*"
 pytest = "*"
 selenium = "*"
+ipython = "*"
 
 [requires]
 python_version = "3.8"

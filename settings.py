@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 
-PORT = int(os.getenv("PORT", 8000))
+PORT = int(os.getenv("PORT", 8050))
 print(PORT)
 
 CACHE_AGE = 60 * 60 * 24
