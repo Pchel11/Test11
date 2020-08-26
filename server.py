@@ -65,7 +65,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             handler, args = endpoints[path]
             handler(*args)
         except (NotFound, KeyError):
-            self.handle_static("404.html", "text/html")
+            self.handle_404()
         except MethodNotAllowed:
             self.handle_405()
         except Exception:
@@ -90,6 +90,10 @@ class MyHttp(SimpleHTTPRequestHandler):
     def handle_static(self, file_path, ct):
         content = read_static(file_path)
         self.respond(content, content_type=ct)
+
+    def handle_404(self):
+        content = read_static("404.html")
+        self.respond(content, code=404, content_type="text/html")
 
     def handle_405(self):
         self.respond("", code=405, content_type="text/plain")
