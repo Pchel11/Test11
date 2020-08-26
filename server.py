@@ -91,11 +91,6 @@ class MyHttp(SimpleHTTPRequestHandler):
         content = read_static(file_path)
         self.respond(content, content_type=ct)
 
-    def handle_404(self):
-        msg = """NOT FOUND!!!!!!!!"""
-
-        self.respond(msg, code=404, content_type="text/plain")
-
     def handle_405(self):
         self.respond("", code=405, content_type="text/plain")
 

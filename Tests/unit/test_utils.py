@@ -45,7 +45,7 @@ def test_to_bytes():
 @pytest.mark.unit
 def test_read_static():
     content = read_static("test.txt")
-    assert content == b"test\n"
+    assert content == b"test"
 
     try:
         read_static("xxx")
