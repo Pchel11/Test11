@@ -50,8 +50,8 @@ class MyHttp(SimpleHTTPRequestHandler):
         content_type = get_content_type_from_file(file_path)
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
-            "/style/": [self.handle_static, ["styles/Style.css", "code=404", "text/css"]],
-            "/style404/": [self.handle_static, ["styles/Style404.css", "code=404", "text/css"]],
+            "/style/": [self.handle_static, ["styles/Style.css", "text/css"]],
+            "/style404/": [self.handle_static, ["styles/Style404.css", "text/css"]],
             "/bg/": [self.handle_static, ["images/back.jpg", "image/jpg"]],
             # "/pchel/": [self.handle_static, ["images/pchel.png", "image/png"]],
 
@@ -89,7 +89,7 @@ class MyHttp(SimpleHTTPRequestHandler):
 
     def handle_static(self, file_path, ct):
         content = read_static(file_path)
-        self.respond(content, code=200, content_type=ct)
+        self.respond(content, content_type=ct)
 
     def handle_405(self):
         self.respond("", code=405, content_type="text/plain")
