@@ -41,16 +41,16 @@ class MyHttp(SimpleHTTPRequestHandler):
         content = f"""
         <html>
         <head><title>Hello Page</title></head>
-        <body>
-        <h1 >Hello {name}!</h1>
+        <body style="background-color:00BFFBF">
+        <h1>Hello {name}!</h1>
         <h2>{year}</h2>
         <p>path: {self.path}</p>
             
-            <form>
+            <form">
                 <div class="Name"><label for="xxx-id">Your name:</label>
                 <input type="text" name="xxx" id="xxx-id">
                 </div>
-                <div class="Year" style="position:absolute;top:180"><label for="year-id">Your age:</label>
+                <div class="Year" style="position:absolute;top:180;"><label for="year-id">Your age:</label>
                 <input type="text" name="year" id="year-id">
                 <button type="submit">Greet</button>
                 </div>           
