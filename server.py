@@ -52,7 +52,7 @@ class MyHttp(SimpleHTTPRequestHandler):
                 </div>
                 <div class="Year" style="position:absolute;top:180;"><label for="year-id">Your age:</label>
                 <input type="text" name="year" id="year-id">
-                <button type="submit">Greet</button>
+                <button type="submit" style="position:absolute;left:250;top:-33;height:5em">Greet</button>
                 </div>           
             </form>
 

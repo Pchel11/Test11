@@ -68,7 +68,7 @@ def get_name_from_qs(qs: str) -> str:
 
 def get_year_from_qs(qs: str) -> str:
     if not qs:
-        return "You was never born"
+        return "You wasn't born("
 
     pairs = qs.split("&")
 
@@ -81,6 +81,6 @@ def get_year_from_qs(qs: str) -> str:
             value = f"You was born in {value}"
             return value
         elif value == None:
-            value = "You was never born("
+            value = "You wasn't born("
             return value
-    return "You was never born("
+    return "You wasn't born("
