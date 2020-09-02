@@ -3,7 +3,6 @@ from typing import AnyStr
 from urllib.parse import parse_qs
 
 import settings
-from custom_types import User
 from errors import NotFound
 
 
@@ -46,21 +45,40 @@ def read_static(path: str) -> bytes:
 
 
 def get_content_type(file_path: str) -> str:
+    """
+    Calculates content-type against given path. Default is "text/html"
+    :param file_path: hypothetical path to file
+    :return: content-type value
+    """
+
     if not file_path:
         return "text/html"
     content_type, _ = mimetypes.guess_type(file_path)
     return content_type
 
 
-def get_user_data(qs: str) -> User:
-    qp = parse_qs(qs)
+def get_user_data(query: str):
+    """
+    Builds user's data against given query string
+    :param query: string
+    :return: user's data
+    """
 
-    default_list_of_names = ["world"]
-    default_list_of_ages = [0]
+    from custom_types import User
 
-    list_of_names = qp.get("name", default_list_of_names)
-    list_of_ages = qp.get("age", default_list_of_ages)
+    anonymous = User.default()
 
-    name = list_of_names[0]
-    age = int(list_of_ages[0])
+    try:
+        key_value_pairs = parse_qs(query, strict_parsing=True)
+    except ValueError:
+        return anonymous
+
+    name_values = key_value_pairs.get("name", [anonymous.name])
+    name = name_values[0]
+
+    age_values = key_value_pairs.get("age", [anonymous.age])
+    age = age_values[0]
+    if isinstance(age, str) and age.isdecimal():
+        age = int(age)
+
     return User(name=name, age=age)

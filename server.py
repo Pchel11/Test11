@@ -3,10 +3,9 @@ from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 
 import settings
-from custom_types import Endpoint
+from custom_types import HttpRequest
 from errors import MethodNotAllowed
 from errors import NotFound
-from utils import get_content_type
 from utils import get_user_data
 from utils import read_static
 from utils import to_bytes
@@ -14,19 +13,24 @@ from utils import to_bytes
 
 class MyHttp(SimpleHTTPRequestHandler):
     def do_GET(self):
-        endpoint = Endpoint.from_path(self.path)
-        content_type = get_content_type(endpoint.file_name)
+        self.dispatch("get")
+
+    def do_POST(self):
+        self.dispatch("post")
+
+    def dispatch(self, http_method):
+        req = HttpRequest.from_path(self.path, method=http_method)
 
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
-            "/st/": [self.handle_static, [f"styles/{endpoint.file_name}", "text/css"]],
-            "/img/": [self.handle_static, [f"images/{endpoint.file_name}", content_type]],
-            "/hello/": [self.handle_hello, [endpoint]],
+            "/st/": [self.handle_static, [f"styles/{req.file_name}", req.content_type]],
+            "/img/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
+            "/hello/": [self.handle_hello, [req]],
             "/0/": [self.handle_zde, []],
         }
 
         try:
-            handler, args = endpoints[endpoint.normal]
+            handler, args = endpoints[req.normal]
             handler(*args)
         except (NotFound, KeyError):
             self.handle_404()
@@ -35,9 +39,20 @@ class MyHttp(SimpleHTTPRequestHandler):
         except Exception:
             self.handle_500()
 
-    def handle_hello(self, endpoint):
-        user = get_user_data(endpoint.query_string)
-        year = datetime.now().year - user.age
+    def get_request_payload(self) -> str:
+        content_length_in_str = self.headers.get("content-length", 0)
+        content_length = int(content_length_in_str)
+
+        if not content_length:
+            return ""
+        payload_in_bytes = self.rfile.read(content_length)
+        payload = payload_in_bytes.decode()
+        return payload
+
+    def handle_hello(self, request):
+        query_string = self.get_request_payload() or request.query_string
+        user = get_user_data(query_string)
+        year = datetime.now().year - int(user.age)
 
         content = f"""
         <html>
@@ -47,7 +62,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         <h2>You were born in {year}</h2>
         <p>path: {self.path}</p>
             
-            <form>
+            <form method="post">
                 <div class="name"><label for="name-id">Your name:</label>
                 <input type="text" name="name" id="name-id">
                 </div>
