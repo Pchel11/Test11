@@ -1,4 +1,5 @@
 import traceback
+from datetime import datetime
 from http.server import SimpleHTTPRequestHandler
 
 import settings
@@ -6,10 +7,9 @@ from custom_types import Endpoint
 from errors import MethodNotAllowed
 from errors import NotFound
 from utils import get_content_type
-from utils import get_name_from_qs
+from utils import get_user_data
 from utils import read_static
 from utils import to_bytes
-from utils import get_year_from_qs
 
 
 class MyHttp(SimpleHTTPRequestHandler):
@@ -36,23 +36,24 @@ class MyHttp(SimpleHTTPRequestHandler):
             self.handle_500()
 
     def handle_hello(self, endpoint):
-        name = get_name_from_qs(endpoint.query_string)
-        year = get_year_from_qs(endpoint.query_string)
+        user = get_user_data(endpoint.query_string)
+        year = datetime.now().year - user.age
+
         content = f"""
         <html>
         <head><title>Hello Page</title></head>
         <body style="background-color:00BFFBF">
-        <h1>Hello {name}!</h1>
-        <h2>{year}</h2>
+        <h1>Hello {user.name}!</h1>
+        <h2>You were born in {year}</h2>
         <p>path: {self.path}</p>
             
-            <form">
-                <div class="Name"><label for="xxx-id">Your name:</label>
-                <input type="text" name="xxx" id="xxx-id">
+            <form>
+                <div class="name"><label for="name-id">Your name:</label>
+                <input type="text" name="name" id="name-id">
                 </div>
-                <div class="Year" style="position:absolute;top:180;"><label for="year-id">Your age:</label>
-                <input type="text" name="year" id="year-id">
-                <button type="submit" style="position:absolute;left:250;top:-33;height:5em">Greet</button>
+                <div class="age" style="position:absolute;top:180;"><label for="year-id">Your age:</label>
+                <input type="text" name="age" id="age-id">
+                <button type="submit" id="greet_button-id" style="position:absolute;left:250;top:-33;height:5em">Greet</button>
                 </div>           
             </form>
 
