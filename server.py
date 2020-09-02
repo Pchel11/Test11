@@ -122,7 +122,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         if isinstance(content, bytes):
             content = content.decode()
 
-        return  content
+        return content
 
     @staticmethod
     def save_user_qs_to_file(query: str):
