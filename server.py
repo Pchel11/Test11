@@ -6,6 +6,7 @@ import settings
 from custom_types import HttpRequest
 from errors import MethodNotAllowed
 from errors import NotFound
+from settings import STORAGE_DIR
 from utils import get_user_data
 from utils import read_static
 from utils import to_bytes
@@ -26,6 +27,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             "/st/": [self.handle_static, [f"styles/{req.file_name}", req.content_type]],
             "/img/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
             "/hello/": [self.handle_hello, [req]],
+            "/hello-update/": [self.handle_hello_update, [req]],
             "/0/": [self.handle_zde, []],
         }
 
@@ -50,8 +52,13 @@ class MyHttp(SimpleHTTPRequestHandler):
         return payload
 
     def handle_hello(self, request):
-        query_string = self.get_request_payload() or request.query_string
+        if request.method != "get":
+            raise MethodNotAllowed
+
+        query_string = self.get_user_qs_from_file()
+
         user = get_user_data(query_string)
+
         year = datetime.now().year - int(user.age)
 
         content = f"""
@@ -62,7 +69,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         <h2>You were born in {year}</h2>
         <p>path: {self.path}</p>
             
-            <form method="post">
+            <form method="post" action="/hello-update">
                 <div class="name"><label for="name-id">Your name:</label>
                 <input type="text" name="name" id="name-id">
                 </div>
@@ -77,6 +84,14 @@ class MyHttp(SimpleHTTPRequestHandler):
         """
 
         self.respond(content)
+
+    def handle_hello_update(self, request: HttpRequest):
+        if request.method != "post":
+            raise MethodNotAllowed
+
+        qs = self.get_request_payload()
+        self.save_user_qs_to_file(qs)
+        self.redirect("/hello")
 
     def handle_zde(self):
         x = 1 / 0
@@ -95,12 +110,37 @@ class MyHttp(SimpleHTTPRequestHandler):
     def handle_500(self):
         self.respond(traceback.format_exc(), code=500, content_type="text/plain")
 
+    @staticmethod
+    def get_user_qs_from_file():
+        qs_file = STORAGE_DIR / "xxx.txt"
+        if not qs_file.is_file():
+            return ""
+
+        with qs_file.open("r") as src:
+            content = src.read()
+
+        if isinstance(content, bytes):
+            content = content.decode()
+
+        return  content
+
+    @staticmethod
+    def save_user_qs_to_file(query: str):
+        qs_file = STORAGE_DIR / "xxx.txt"
+        with qs_file.open("w") as dst:
+            dst.write(query)
+
     def respond(self, message, code=200, content_type="text/html"):
         payload = to_bytes(message)
 
         self.send_response(code)
         self.send_header("Content-type", content_type)
         self.send_header("Content-length", str(len(payload)))
-        self.send_header("Cache-control", f"max-age={settings.CACHE_AGE}")
         self.end_headers()
         self.wfile.write(payload)
+
+    def redirect(self, to):
+        self.send_response(302)
+        self.send_header("Location", to)
+        self.end_headers()
+
