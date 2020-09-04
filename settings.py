@@ -11,8 +11,5 @@ PROJECT_DIR = Path(__file__).parent.resolve()
 STATIC_DIR = PROJECT_DIR / "static"
 assert STATIC_DIR.is_dir(), f"missing directory: STATIC_DIR=`{STATIC_DIR}`"
 
-TESTS_DIR = PROJECT_DIR / "tests"
-assert TESTS_DIR.is_dir(), f"missing directory: TESTS_DIR=`{TESTS_DIR}`"
-
 STORAGE_DIR = PROJECT_DIR / "storage"
 assert STORAGE_DIR.is_dir(), f"missing directory: STORAGE_DIR=`{STORAGE_DIR}`"
