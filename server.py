@@ -33,7 +33,11 @@ class MyHttp(SimpleHTTPRequestHandler):
         }
 
         try:
-            handler, args = endpoints[req.normal]
+            try:
+                handler, args = endpoints[req.normal]
+            except KeyError as err:
+                raise NotFound from err
+
             handler(*args)
         except (NotFound, KeyError):
             self.handle_404()
@@ -92,6 +96,12 @@ class MyHttp(SimpleHTTPRequestHandler):
         name_new = name_saved = saved_user.name
 
         year = date.today().year - age_saved
+        if year < 0:
+            year = -year
+            era = "BC"
+        elif year >= 0:
+            year = year
+            era = "AC"
 
         if new_user.errors:
             if "name" in new_user.errors:
@@ -118,6 +128,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             "class_for_age": css_class_for_age,
             "class_for_name": css_class_for_name,
             "year": year,
+            "era": era,
         }
 
         content = template.format(**context)

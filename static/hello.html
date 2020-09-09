@@ -2,52 +2,11 @@
 <html>
 <head>
   <title>PchelApp</title>
-  <style>
-    :root {{
-      --padding-left: 30px;
-      --padding-top: 30px;
-    }}
-
-    body {{
-      background-color: #d2ddff;
-      padding-left: var(--padding-left);
-      padding-top: var(--padding-left);
-    }}
-
-    .g {{
-      display: grid;
-      grid-column-gap: 0.2rem;
-      grid-row-gap: 1rem;
-      grid-template-areas:
-        "gi-name-label  gi-name-label"
-        "gi-name-input  gi-empty-12"
-        "gi-empty-21    gi-empty-22"
-        "gi-age-label   gi-age-label"
-        "gi-age-input   gi-empty-32"
-        "gi-empty-41    gi-empty-42"
-        "gi-submit      gi-empty-52";
-    }}
-
-    .f > * {{
-      left: 0;
-      margin: auto;
-      padding-left: var(--padding-left);
-      padding-top: var(--padding-top);
-      position: absolute;
-      width: 40%;
-    }}
-
-    .error {{
-      background-color: #d61b1b;
-      color: white;
-      font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
-      padding: 1rem;
-    }}
-  </style>
-</head>
+  <link rel="stylesheet" type="text/css" href="/st/hello.css">
+  </head>
 <body>
 <h1>Hello {name_saved}!</h1>
-<h1>You was born in {year}!</h1>
+<h1>You were born in {year} {era}!</h1>
 
 <div class="f">
   <form action="/hello-update" method="post">
