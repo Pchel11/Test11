@@ -13,3 +13,6 @@ assert STATIC_DIR.is_dir(), f"missing directory: STATIC_DIR=`{STATIC_DIR}`"
 
 STORAGE_DIR = PROJECT_DIR / "storage"
 assert STORAGE_DIR.is_dir(), f"missing directory: STORAGE_DIR=`{STORAGE_DIR}`"
+
+ARTIFACTS_DIR = PROJECT_DIR / "tests" / "artifacts"
+assert ARTIFACTS_DIR.is_dir(), f"missing directory: ARTIFACTS_DIR='{ARTIFACTS_DIR}'"

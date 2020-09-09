@@ -1,11 +1,11 @@
 import pytest
 from selenium import webdriver
 
-import settings
+from consts import USERS_DATA
 
 
 @pytest.yield_fixture(scope="function", autouse=True)
-def chrome():
+def browser():
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument("headless")
 
@@ -20,14 +20,16 @@ def chrome():
 
 
 @pytest.yield_fixture(scope="function", autouse=True)
-def main_css():
-    path = settings.STATIC_DIR / "styles" / "main.css"
-    with path.open("r") as src:
-        yield src.read()
+def users_data():
+    data = ""
+    if USERS_DATA.is_file():
+        with USERS_DATA.open("r") as src:
+            data = src.read()
 
+    with USERS_DATA.open("w"):
+        pass
 
-@pytest.yield_fixture(scope="function", autouse=True)
-def logo_svg():
-    path = settings.STATIC_DIR / "images" / "logo.svg"
-    with path.open("r") as src:
-        yield src.read()
+    yield
+
+    with USERS_DATA.open("w") as dst:
+        dst.write(data)
