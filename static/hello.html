@@ -1,7 +1,7 @@
 
 <html>
 <head>
-  <title>Study Project Z33 :: Hello</title>
+  <title>PchelApp</title>
   <style>
     :root {{
       --padding-left: 30px;
@@ -9,6 +9,7 @@
     }}
 
     body {{
+      background-color: #d2ddff;
       padding-left: var(--padding-left);
       padding-top: var(--padding-left);
     }}
@@ -37,8 +38,7 @@
     }}
 
     .error {{
-      background-color: #d61b1b
-    ;
+      background-color: #d61b1b;
       color: white;
       font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
       padding: 1rem;
@@ -47,7 +47,7 @@
 </head>
 <body>
 <h1>Hello {name_saved}!</h1>
-<h1>You was born at {year}!</h1>
+<h1>You was born in {year}!</h1>
 
 <div class="f">
   <form action="/hello-update" method="post">
