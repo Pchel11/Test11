@@ -1,16 +1,20 @@
 import traceback
-from datetime import date
+
 from http.server import SimpleHTTPRequestHandler
 
-from consts import CSS_CLASS_ERROR
-from consts import USERS_DATA
 from custom_types import HttpRequest
 from custom_types import User
+
 from errors import MethodNotAllowed
 from errors import NotFound
+
 from utils import read_static
 from utils import to_bytes
 from utils import to_str
+from utils import load_user_data
+from utils import save_user_data
+
+from pages_render import render_hello_page
 
 
 class MyHttp(SimpleHTTPRequestHandler):
@@ -60,10 +64,10 @@ class MyHttp(SimpleHTTPRequestHandler):
         if request.method != "get":
             raise MethodNotAllowed
 
-        query = self.load_user_data()
+        query = load_user_data()
         user = User.build(query)
 
-        content = self.render_hello_page(user, user)
+        content = render_hello_page(user, user)
 
         self.respond(content)
 
@@ -75,65 +79,16 @@ class MyHttp(SimpleHTTPRequestHandler):
         new_user = User.build(form_data)
 
         if not new_user.errors:
-            self.save_user_data(form_data)
+            save_user_data(form_data)
             self.redirect("/hello")
             return
 
-        saved_data = self.load_user_data()
+        saved_data = load_user_data()
         saved_user = User.build(saved_data)
 
-        hello_page = self.render_hello_page(new_user, saved_user)
+        hello_page = render_hello_page(new_user, saved_user)
 
         self.respond(hello_page)
-
-    @staticmethod
-    def render_hello_page(new_user: User, saved_user: User) -> str:
-        css_class_for_name = css_class_for_age = ""
-        label_for_name = "Your name: "
-        label_for_age = "Your age: "
-
-        age_new = age_saved = saved_user.age
-        name_new = name_saved = saved_user.name
-
-        year = date.today().year - age_saved
-        if year < 0:
-            year = -year
-            era = "BC"
-        elif year >= 0:
-            year = year
-            era = "AC"
-
-        if new_user.errors:
-            if "name" in new_user.errors:
-                error = new_user.errors["name"]
-                label_for_name = f"ERROR: {error}"
-                css_class_for_name = CSS_CLASS_ERROR
-
-            if "age" in new_user.errors:
-                error = new_user.errors["age"]
-                label_for_age = f"ERROR: {error}"
-                css_class_for_age = CSS_CLASS_ERROR
-
-            name_new = new_user.name
-            age_new = new_user.age
-
-        template = read_static("hello.html").decode()
-
-        context = {
-            "age_new": age_new or "",
-            "label_for_age": label_for_age,
-            "label_for_name": label_for_name,
-            "name_new": name_new or "",
-            "name_saved": name_saved or "",
-            "class_for_age": css_class_for_age,
-            "class_for_name": css_class_for_name,
-            "year": year,
-            "era": era,
-        }
-
-        content = template.format(**context)
-
-        return content
 
     @staticmethod
     def handle_zde():
@@ -179,20 +134,3 @@ class MyHttp(SimpleHTTPRequestHandler):
         payload = to_str(payload_as_bytes)
 
         return payload
-
-    @staticmethod
-    def load_user_data() -> str:
-        if not USERS_DATA.is_file():
-            return ""
-
-        with USERS_DATA.open("r") as src:
-            data = src.read()
-
-        data = to_str(data)
-
-        return data
-
-    @staticmethod
-    def save_user_data(data: str) -> None:
-        with USERS_DATA.open("w") as dst:
-            dst.write(data)

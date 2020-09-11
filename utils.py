@@ -1,6 +1,8 @@
+from datetime import date
 from typing import AnyStr
 
 import settings
+from consts import USERS_DATA
 from errors import NotFound
 
 
@@ -58,3 +60,31 @@ def read_static(path: str) -> bytes:
         content = src.read()
 
     return content
+
+
+def save_user_data(data: str) -> None:
+    with USERS_DATA.open("w") as dst:
+        dst.write(data)
+
+
+def load_user_data() -> str:
+    if not USERS_DATA.is_file():
+        return ""
+
+    with USERS_DATA.open("r") as src:
+        data = src.read()
+
+    data = to_str(data)
+
+    return data
+
+
+def year_calc(age_saved):
+    year = date.today().year - age_saved
+    if year < 0:
+        year = -year
+        era = "BC"
+    elif year >= 0:
+        year = year
+        era = "AC"
+    return year, era
