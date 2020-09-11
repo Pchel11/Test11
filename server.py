@@ -1,19 +1,15 @@
 import traceback
 
 from http.server import SimpleHTTPRequestHandler
-
 from custom_types import HttpRequest
 from custom_types import User
-
 from errors import MethodNotAllowed
 from errors import NotFound
-
 from utils import read_static
 from utils import to_bytes
 from utils import to_str
 from utils import load_user_data
 from utils import save_user_data
-
 from pages_render import render_hello_page
 
 
