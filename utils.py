@@ -62,16 +62,20 @@ def read_static(path: str) -> bytes:
     return content
 
 
-def save_user_data(data: str) -> None:
-    with USERS_DATA.open("w") as dst:
+def save_user_data(data: str, session) -> None:
+    session_file = USERS_DATA / f"user_{session}.txt"
+    with session_file.open("w") as dst:
         dst.write(data)
 
 
-def load_user_data() -> str:
-    if not USERS_DATA.is_file():
-        return ""
+def load_user_data(session: str) -> str:
+    session_file = f"user_{session}.txt"
+    user_file = USERS_DATA / session_file
 
-    with USERS_DATA.open("r") as src:
+    if not user_file.is_file():
+        return " "
+
+    with user_file.open("r") as src:
         data = src.read()
 
     data = to_str(data)

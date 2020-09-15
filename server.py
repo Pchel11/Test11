@@ -1,6 +1,8 @@
+import os
 import traceback
 
 from http.server import SimpleHTTPRequestHandler
+from urllib.parse import parse_qs
 from custom_types import HttpRequest
 from custom_types import User
 from errors import MethodNotAllowed
@@ -29,6 +31,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             "/img/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
             "/hello/": [self.handle_hello, [req]],
             "/hello-update/": [self.handle_hello_update, [req]],
+            "/hello-reset/": [self.handle_hello_reset, []],
             "/0/": [self.handle_zde, []],
         }
 
@@ -56,11 +59,31 @@ class MyHttp(SimpleHTTPRequestHandler):
         payload = payload_in_bytes.decode()
         return payload
 
+    def get_session(self):
+        cookie = self.headers.get("Cookie", "")
+        qs = cookie.split(":")
+        session = qs[0]
+        if not session:
+            return ""
+        return session
+
+    def generate_new_session(self) -> str:
+        return os.urandom(8).hex()
+
     def handle_hello(self, request: HttpRequest):
         if request.method != "get":
             raise MethodNotAllowed
 
-        query = load_user_data()
+        session = self.get_session()
+
+        if not session:
+            session = self.generate_new_session()
+            user = User.build(" ")
+            content = render_hello_page(user, user)
+            self.respond(content, session=session)
+            return
+
+        query = load_user_data(str(session))
         user = User.build(query)
 
         content = render_hello_page(user, user)
@@ -74,17 +97,24 @@ class MyHttp(SimpleHTTPRequestHandler):
         form_data = self.get_form_data()
         new_user = User.build(form_data)
 
+        session = self.get_session() or self.generate_new_session()
+
         if not new_user.errors:
-            save_user_data(form_data)
+            save_user_data(form_data, session)
             self.redirect("/hello")
             return
 
-        saved_data = load_user_data()
+        saved_data = load_user_data(self.get_session())
         saved_user = User.build(saved_data)
 
         hello_page = render_hello_page(new_user, saved_user)
 
         self.respond(hello_page)
+
+    def handle_hello_reset(self):
+        session = self.get_session()
+        save_user_data(" ", session)
+        self.redirect("/hello")
 
     @staticmethod
     def handle_zde():
@@ -105,12 +135,14 @@ class MyHttp(SimpleHTTPRequestHandler):
     def handle_500(self):
         self.respond(traceback.format_exc(), code=500, content_type="text/plain")
 
-    def respond(self, message, code=200, content_type="text/html"):
+    def respond(self, message, code=200, content_type="text/html", session=None):
         payload = to_bytes(message)
 
         self.send_response(code)
         self.send_header("Content-type", content_type)
         self.send_header("Content-length", str(len(payload)))
+        if session:
+            self.send_header("Set-Cookie", session)
         self.end_headers()
         self.wfile.write(payload)
 

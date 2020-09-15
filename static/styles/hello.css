@@ -4,11 +4,17 @@
 }
 
 body {
-  background-color: #d2ddff;
-  padding-left: var(--padding-left);
-  padding-top: var(--padding-left);
+  background-color: #dda1f5;
+  position: absolute;
+  left: 10;
+  font-size: larger;
 }
 
+#reset-button-id {
+  padding-right: 132px;
+  padding-left: 132px;
+  text-align: center;
+}
 .g {
   display: grid;
   grid-column-gap: 0.2rem;
@@ -20,16 +26,8 @@ body {
     "gi-age-label   gi-age-label"
     "gi-age-input   gi-empty-32"
     "gi-empty-41    gi-empty-42"
-    "gi-submit      gi-empty-52";
-}
-
-.f > * {
-  left: 0;
-  margin: auto;
-  padding-left: var(--padding-left);
-  padding-top: var(--padding-top);
-  position: absolute;
-  width: 40%;
+    "gi-submit      gi-empty-52"
+    "gi-submit_rst  gi-empty-62";
 }
 
 .error {
