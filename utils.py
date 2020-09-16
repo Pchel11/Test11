@@ -92,3 +92,16 @@ def year_calc(age_saved):
         year = year
         era = "AC"
     return year, era
+
+
+def get_form_data(headers, rfile) -> str:
+    content_length_as_str = headers.get("content-length", 0)
+    content_length = int(content_length_as_str)
+
+    if not content_length:
+        return ""
+
+    payload_as_bytes = rfile.read(content_length)
+    payload = to_str(payload_as_bytes)
+
+    return payload

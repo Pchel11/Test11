@@ -2,14 +2,12 @@ import os
 import traceback
 
 from http.server import SimpleHTTPRequestHandler
-from urllib.parse import parse_qs
 from custom_types import HttpRequest
 from custom_types import User
 from errors import MethodNotAllowed
 from errors import NotFound
-from utils import read_static
+from utils import read_static, get_form_data
 from utils import to_bytes
-from utils import to_str
 from utils import load_user_data
 from utils import save_user_data
 from pages_render import render_hello_page
@@ -67,7 +65,8 @@ class MyHttp(SimpleHTTPRequestHandler):
             return ""
         return session
 
-    def generate_new_session(self) -> str:
+    @staticmethod
+    def generate_new_session() -> str:
         return os.urandom(8).hex()
 
     def handle_hello(self, request: HttpRequest):
@@ -94,7 +93,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         if request.method != "post":
             raise MethodNotAllowed
 
-        form_data = self.get_form_data()
+        form_data = get_form_data(self.headers, self.rfile)
         new_user = User.build(form_data)
 
         session = self.get_session() or self.generate_new_session()
@@ -150,15 +149,3 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.send_response(302)
         self.send_header("Location", to)
         self.end_headers()
-
-    def get_form_data(self) -> str:
-        content_length_as_str = self.headers.get("content-length", 0)
-        content_length = int(content_length_as_str)
-
-        if not content_length:
-            return ""
-
-        payload_as_bytes = self.rfile.read(content_length)
-        payload = to_str(payload_as_bytes)
-
-        return payload
