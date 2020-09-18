@@ -1,19 +1,179 @@
-import os
 import traceback
 
 from http.server import SimpleHTTPRequestHandler
-from custom_types import HttpRequest
-from custom_types import User
-from errors import MethodNotAllowed
-from errors import NotFound
-from utils import read_static, get_form_data
-from utils import to_bytes
-from utils import load_user_data
-from utils import save_user_data
-from pages_render import render_hello_page
+from typing import Optional
+
+import consts
+import custom_types
+import errors
+import utils
 
 
 class MyHttp(SimpleHTTPRequestHandler):
+    def handle_theme(self, request: custom_types.HttpRequest) -> None:
+        if request.method != "post":
+            raise errors.MethodNotAllowed
+
+        response_kwargs = {}
+        session = request.session
+        if not session:
+            session = utils.generate_new_session()
+            response_kwargs["session"] = session
+
+        current_theme = utils.load_theme(session)
+        new_theme = utils.switch_theme(current_theme)
+        utils.store_theme(session, new_theme)
+
+        self.redirect("/hello", **response_kwargs)
+
+    def handle_hello(self, request: custom_types.HttpRequest) -> None:
+        if request.method != "get":
+            raise errors.MethodNotAllowed
+
+        profile = utils.load_profile(request.session)
+        user = custom_types.User.build(profile)
+
+        content = self.render_hello_page(request, user, user)
+
+        self.respond(content)
+
+    def handle_hello_update(self, request: custom_types.HttpRequest) -> None:
+        if request.method != "post":
+            raise errors.MethodNotAllowed
+
+        form_data = self.get_form_data()
+        new_user = custom_types.User.build(form_data)
+
+        response_kwargs = {}
+        session = request.session
+        if not session:
+            session = utils.generate_new_session()
+            response_kwargs["session"] = session
+
+        if new_user.errors:
+            saved_data = utils.load_profile(session)
+            saved_user = custom_types.User.build(saved_data)
+            html = self.render_hello_page(request, new_user, saved_user)
+            self.respond(html, **response_kwargs)
+        else:
+            utils.store_profile(session, form_data)
+            self.redirect("/hello", **response_kwargs)
+
+    def handle_hello_reset(self, request: custom_types.HttpRequest) -> None:
+        if request.method != "post":
+            raise errors.MethodNotAllowed
+
+        utils.drop_profile(request.session)
+        self.redirect("/hello/")
+
+    def handle_zde(self) -> None:
+        x = 1 / 0
+        print(x)
+
+    def handle_static(self, file_path, content_type) -> None:
+        content = utils.read_static(file_path)
+        self.respond(content, content_type=content_type)
+
+    def render_hello_page(
+        self,
+        request: custom_types.HttpRequest,
+        new_user: custom_types.User,
+        saved_user: custom_types.User,
+    ) -> str:
+        css_class_for_name = css_class_for_age = ""
+        label_for_name = "Your name: "
+        label_for_age = "Your age: "
+
+        age_new = age_saved = saved_user.age
+        name_new = name_saved = saved_user.name
+
+        if new_user.errors:
+            if "name" in new_user.errors:
+                error = new_user.errors["name"]
+                label_for_name = f"ERROR: {error}"
+                css_class_for_name = consts.CSS_CLASS_ERROR
+
+            if "age" in new_user.errors:
+                error = new_user.errors["age"]
+                label_for_age = f"ERROR: {error}"
+                css_class_for_age = consts.CSS_CLASS_ERROR
+
+            name_new = new_user.name
+            age_new = new_user.age
+
+        theme = utils.load_theme(request.session)
+        year, era = utils.year_calc(age_saved)
+        template = utils.read_static("hello.html").decode()
+
+        context = {
+            "age_new": age_new or "",
+            "label_for_age": label_for_age,
+            "label_for_name": label_for_name,
+            "name_new": name_new or "",
+            "name_saved": name_saved or "",
+            "class_for_age": css_class_for_age,
+            "class_for_name": css_class_for_name,
+            "year": year,
+            "era": era,
+            "theme": theme,
+        }
+
+        content = template.format(**context)
+
+        return content
+
+    def handle_404(self) -> None:
+        msg = """NOT FOUND"""
+        self.respond(msg, code=404, content_type="text/plain")
+
+    def handle_405(self) -> None:
+        self.respond("", code=405, content_type="text/plain")
+
+    def handle_500(self) -> None:
+        msg = traceback.format_exc()
+        self.respond(msg, code=500, content_type="text/plain")
+
+    def respond(
+        self, message, code=200, content_type="text/html", session: Optional[str] = None
+    ) -> None:
+        payload = utils.to_bytes(message)
+
+        self.send_response(code)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header_session(session)
+        self.end_headers()
+        self.wfile.write(payload)
+
+    def redirect(self, to, session: Optional[str] = None) -> None:
+        self.send_response(302)
+        self.send_header("Location", to)
+        self.send_header_session(session)
+        self.end_headers()
+
+    def send_header_session(self, session: Optional[str]) -> None:
+        if session is None:
+            return
+
+        if session:
+            header = utils.build_session_header(session)
+        else:
+            header = utils.build_session_header("expires", expires=True)
+
+        self.send_header("Set-Cookie", header)
+
+    def get_form_data(self) -> str:
+        content_length_as_str = self.headers.get("Content-Length", 0)
+        content_length = int(content_length_as_str)
+
+        if not content_length:
+            return ""
+
+        payload_as_bytes = self.rfile.read(content_length)
+        payload = utils.to_str(payload_as_bytes)
+
+        return payload
+
     def do_GET(self):
         self.dispatch("get")
 
@@ -21,131 +181,30 @@ class MyHttp(SimpleHTTPRequestHandler):
         self.dispatch("post")
 
     def dispatch(self, http_method):
-        req = HttpRequest.from_path(self.path, method=http_method)
+        req = custom_types.HttpRequest.build(
+            self.path, method=http_method, headers=self.headers
+        )
 
         endpoints = {
             "/": [self.handle_static, ["index.html", "text/html"]],
-            "/st/": [self.handle_static, [f"styles/{req.file_name}", req.content_type]],
-            "/img/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
-            "/hello/": [self.handle_hello, [req]],
-            "/hello-update/": [self.handle_hello_update, [req]],
-            "/hello-reset/": [self.handle_hello_reset, []],
             "/0/": [self.handle_zde, []],
+            "/hello-reset/": [self.handle_hello_reset, [req]],
+            "/hello-update/": [self.handle_hello_update, [req]],
+            "/hello/": [self.handle_hello, [req]],
+            "/i/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
+            "/s/": [self.handle_static, [f"styles/{req.file_name}", req.content_type]],
+            "/theme/": [self.handle_theme, [req]],
         }
 
         try:
             try:
                 handler, args = endpoints[req.normal]
-            except KeyError as err:
-                raise NotFound from err
-
+            except KeyError:
+                raise errors.NotFound
             handler(*args)
-        except (NotFound, KeyError):
+        except errors.NotFound:
             self.handle_404()
-        except MethodNotAllowed:
+        except errors.MethodNotAllowed:
             self.handle_405()
         except Exception:
             self.handle_500()
-
-    def get_request_payload(self) -> str:
-        content_length_in_str = self.headers.get("content-length", 0)
-        content_length = int(content_length_in_str)
-
-        if not content_length:
-            return ""
-        payload_in_bytes = self.rfile.read(content_length)
-        payload = payload_in_bytes.decode()
-        return payload
-
-    def get_session(self):
-        cookie = self.headers.get("Cookie", "")
-        qs = cookie.split(":")
-        session = qs[0]
-        if not session:
-            return ""
-        return session
-
-    @staticmethod
-    def generate_new_session() -> str:
-        return os.urandom(8).hex()
-
-    def handle_hello(self, request: HttpRequest):
-        if request.method != "get":
-            raise MethodNotAllowed
-
-        session = self.get_session()
-
-        if not session:
-            session = self.generate_new_session()
-            user = User.build(" ")
-            content = render_hello_page(user, user)
-            self.respond(content, session=session)
-            return
-
-        query = load_user_data(str(session))
-        user = User.build(query)
-
-        content = render_hello_page(user, user)
-
-        self.respond(content)
-
-    def handle_hello_update(self, request: HttpRequest):
-        if request.method != "post":
-            raise MethodNotAllowed
-
-        form_data = get_form_data(self.headers, self.rfile)
-        new_user = User.build(form_data)
-
-        session = self.get_session() or self.generate_new_session()
-
-        if not new_user.errors:
-            save_user_data(form_data, session)
-            self.redirect("/hello")
-            return
-
-        saved_data = load_user_data(self.get_session())
-        saved_user = User.build(saved_data)
-
-        hello_page = render_hello_page(new_user, saved_user)
-
-        self.respond(hello_page)
-
-    def handle_hello_reset(self):
-        session = self.get_session()
-        save_user_data(" ", session)
-        self.redirect("/hello")
-
-    @staticmethod
-    def handle_zde():
-        x = 1 / 0
-        print(x)
-
-    def handle_static(self, file_path, ct):
-        content = read_static(file_path)
-        self.respond(content, content_type=ct)
-
-    def handle_404(self):
-        content = read_static("404.html")
-        self.respond(content, code=404, content_type="text/html")
-
-    def handle_405(self):
-        self.respond("", code=405, content_type="text/plain")
-
-    def handle_500(self):
-        self.respond(traceback.format_exc(), code=500, content_type="text/plain")
-
-    def respond(self, message, code=200, content_type="text/html", session=None):
-        payload = to_bytes(message)
-
-        self.send_response(code)
-        self.send_header("Content-type", content_type)
-        self.send_header("Content-length", str(len(payload)))
-        if session:
-            self.send_header("Set-Cookie", session)
-        self.end_headers()
-        self.wfile.write(payload)
-
-    def redirect(self, to):
-        self.send_response(302)
-        self.send_header("Location", to)
-        self.end_headers()

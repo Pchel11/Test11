@@ -23,41 +23,6 @@ def test_get(browser, request, users_data):
     validate_content(page, "Hello anonymous!")
 
 
-# @pytest.mark.functional
-# @screenshot_on_failure
-# def test_post(browser, request, users_data):
-#     name = "USER"
-#     age = 10
-#     year = date.today().year - age
-#
-#     anon_on_page = "Hello anonymous!"
-#     name_on_page = f"Hello {name}"
-#     year_on_page = f"You was born at {year}!"
-#
-#     page = HelloPage(browser, url)
-#
-#     validate_structure(page)
-#     validate_content(page, anon_on_page)
-#
-#     set_input_name_value(page, name)
-#     set_input_age_value(page, "")
-#     submit(page)
-#     validate_redirect(page, fr"hello/?")
-#     validate_content(page, anon_on_page)
-#
-#     set_input_name_value(page, "")
-#     set_input_age_value(page, str(age))
-#     submit(page)
-#     validate_redirect(page, fr"hello/?")
-#     validate_content(page, anon_on_page)
-#
-#     set_input_name_value(page, name)
-#     set_input_age_value(page, str(age))
-#     submit(page)
-#     validate_redirect(page, fr"hello/?")
-#     validate_content(page, name_on_page, year_on_page)
-#
-
 def validate_title(page: HelloPage):
     assert "PchelApp" == page.title
 
@@ -66,6 +31,9 @@ def validate_structure(page: HelloPage):
     assert "form" in page.html
 
     button: WebElement = page.button_greet
+    assert button.tag_name == "button"
+
+    button: WebElement = page.button_style
     assert button.tag_name == "button"
 
     input_name = page.input_name
@@ -106,3 +74,7 @@ def set_input_age_value(page: HelloPage, value: str):
 
 def submit(page: HelloPage):
     page.button_greet.send_keys(Keys.RETURN)
+
+
+def style(page: HelloPage):
+    page.button_style.send_keys(Keys.RETURN)
