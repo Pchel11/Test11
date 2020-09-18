@@ -3,10 +3,10 @@ import traceback
 from http.server import SimpleHTTPRequestHandler
 from typing import Optional
 
-import consts
 import custom_types
 import errors
 import utils
+from pages_render import render_hello_page
 
 
 class MyHttp(SimpleHTTPRequestHandler):
@@ -33,7 +33,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         profile = utils.load_profile(request.session)
         user = custom_types.User.build(profile)
 
-        content = self.render_hello_page(request, user, user)
+        content = render_hello_page(request, user, user)
 
         self.respond(content)
 
@@ -53,7 +53,7 @@ class MyHttp(SimpleHTTPRequestHandler):
         if new_user.errors:
             saved_data = utils.load_profile(session)
             saved_user = custom_types.User.build(saved_data)
-            html = self.render_hello_page(request, new_user, saved_user)
+            html = render_hello_page(request, new_user, saved_user)
             self.respond(html, **response_kwargs)
         else:
             utils.store_profile(session, form_data)
@@ -66,61 +66,14 @@ class MyHttp(SimpleHTTPRequestHandler):
         utils.drop_profile(request.session)
         self.redirect("/hello/")
 
-    def handle_zde(self) -> None:
+    @staticmethod
+    def handle_zde() -> None:
         x = 1 / 0
         print(x)
 
     def handle_static(self, file_path, content_type) -> None:
         content = utils.read_static(file_path)
         self.respond(content, content_type=content_type)
-
-    def render_hello_page(
-        self,
-        request: custom_types.HttpRequest,
-        new_user: custom_types.User,
-        saved_user: custom_types.User,
-    ) -> str:
-        css_class_for_name = css_class_for_age = ""
-        label_for_name = "Your name: "
-        label_for_age = "Your age: "
-
-        age_new = age_saved = saved_user.age
-        name_new = name_saved = saved_user.name
-
-        if new_user.errors:
-            if "name" in new_user.errors:
-                error = new_user.errors["name"]
-                label_for_name = f"ERROR: {error}"
-                css_class_for_name = consts.CSS_CLASS_ERROR
-
-            if "age" in new_user.errors:
-                error = new_user.errors["age"]
-                label_for_age = f"ERROR: {error}"
-                css_class_for_age = consts.CSS_CLASS_ERROR
-
-            name_new = new_user.name
-            age_new = new_user.age
-
-        theme = utils.load_theme(request.session)
-        year, era = utils.year_calc(age_saved)
-        template = utils.read_static("hello.html").decode()
-
-        context = {
-            "age_new": age_new or "",
-            "label_for_age": label_for_age,
-            "label_for_name": label_for_name,
-            "name_new": name_new or "",
-            "name_saved": name_saved or "",
-            "class_for_age": css_class_for_age,
-            "class_for_name": css_class_for_name,
-            "year": year,
-            "era": era,
-            "theme": theme,
-        }
-
-        content = template.format(**context)
-
-        return content
 
     def handle_404(self) -> None:
         msg = """NOT FOUND"""
