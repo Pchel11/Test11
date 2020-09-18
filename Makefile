@@ -1,5 +1,4 @@
-
-HERE := $(shell pwd)
+HERE := $(shell cd)
 VENV := $(shell pipenv --venv)
 SRC := ${HERE}
 

@@ -38,7 +38,7 @@ def render_hello_page(
         "label_for_age": label_for_age,
         "label_for_name": label_for_name,
         "name_new": name_new or "",
-        "name_saved": name_saved or "",
+        "name_saved": name_saved or "anonymus",
         "class_for_age": css_class_for_age,
         "class_for_name": css_class_for_name,
         "year": year,
