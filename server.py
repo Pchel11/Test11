@@ -144,7 +144,7 @@ class MyHttp(SimpleHTTPRequestHandler):
             "/hello-reset/": [self.handle_hello_reset, [req]],
             "/hello-update/": [self.handle_hello_update, [req]],
             "/hello/": [self.handle_hello, [req]],
-            "/i/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
+            "/img/": [self.handle_static, [f"images/{req.file_name}", req.content_type]],
             "/s/": [self.handle_static, [f"styles/{req.file_name}", req.content_type]],
             "/theme/": [self.handle_theme, [req]],
         }
