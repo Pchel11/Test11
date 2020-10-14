@@ -1,4 +1,7 @@
 .idea/
+.pytest_cache
+**/artifacts/*.html
+**/artifacts/*.png
 .idea
 **/*~
 # Byte-compiled / optimized / DLL files
