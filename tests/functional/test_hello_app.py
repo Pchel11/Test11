@@ -15,12 +15,55 @@ url = "http://localhost:8050/hello"
 
 @pytest.mark.functional
 @screenshot_on_failure
-def test_get(browser, request, users_data):
+def test_get(browser, request):
     page = HelloPage(browser, url)
 
     validate_title(page)
     validate_structure(page)
     validate_content(page, "Hello anonymous!")
+
+
+@pytest.mark.functional
+@screenshot_on_failure
+def test_post(browser, request):
+    name = "USER"
+    age = 10
+    year = date.today().year - age
+    if year >= 0:
+        era = "AC"
+    elif year < 0:
+        era = "BC"
+        year = -year
+    anon_on_page = "Hello anonymous!"
+    name_on_page = f"Hello {name}"
+    year_on_page = f"You were born in {year} {era}!"
+
+    page = HelloPage(browser, url)
+
+    validate_structure(page)
+    validate_content(page, anon_on_page)
+
+    set_input_name_value(page, name)
+    set_input_age_value(page, "")
+    submit(page)
+    validate_redirect(page, fr"hello/?")
+    validate_content(page, anon_on_page)
+
+    set_input_name_value(page, "")
+    set_input_age_value(page, str(age))
+    submit(page)
+    validate_redirect(page, fr"hello/?")
+    validate_content(page, anon_on_page)
+
+    set_input_name_value(page, name)
+    set_input_age_value(page, str(age))
+    submit(page)
+    validate_redirect(page, fr"hello/?")
+    validate_content(page, name_on_page, year_on_page)
+
+    reset(page)
+    validate_redirect(page, fr"hello/?")
+    validate_content(page, anon_on_page)
 
 
 def validate_title(page: HelloPage):
@@ -30,11 +73,14 @@ def validate_title(page: HelloPage):
 def validate_structure(page: HelloPage):
     assert "form" in page.html
 
-    button: WebElement = page.button_greet
-    assert button.tag_name == "button"
+    button_submit: WebElement = page.button_greet
+    assert button_submit.tag_name == "button"
 
-    button: WebElement = page.button_style
-    assert button.tag_name == "button"
+    button_reset: WebElement = page.button_reset
+    assert button_reset.tag_name == "button"
+
+    button_style: WebElement = page.button_style
+    assert button_style.tag_name == "button"
 
     input_name = page.input_name
     assert input_name.tag_name == "input"
@@ -76,5 +122,5 @@ def submit(page: HelloPage):
     page.button_greet.send_keys(Keys.RETURN)
 
 
-def style(page: HelloPage):
-    page.button_style.send_keys(Keys.RETURN)
+def reset(page: HelloPage):
+    page.button_reset.send_keys(Keys.RETURN)

@@ -1,7 +1,7 @@
 import socketserver
 
-import settings
-from server import MyHttp
+from old import settings
+from old.server import MyHttp
 
 if __name__ == "__main__":
     with socketserver.TCPServer(("", settings.PORT), MyHttp) as httpd:

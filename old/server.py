@@ -1,12 +1,9 @@
 import traceback
-
 from http.server import SimpleHTTPRequestHandler
 from typing import Optional
 
-import custom_types
-import errors
-import utils
-from pages_render import render_hello_page
+from old import utils, custom_types, errors
+from old.pages_render import render_hello_page
 
 
 class MyHttp(SimpleHTTPRequestHandler):

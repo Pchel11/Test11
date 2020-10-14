@@ -1,14 +1,10 @@
 import mimetypes
 from itertools import takewhile
-from typing import NamedTuple
-from typing import Optional
-from typing import Union
-from urllib.parse import parse_qs
-from urllib.parse import urlsplit
+from typing import NamedTuple, Optional, Union
+from urllib.parse import parse_qs, urlsplit
 
-from utils import get_session_from_headers
-from validators import validate_age
-from validators import validate_name
+from old.utils import get_session_from_headers
+from old.validators import validate_age, validate_name
 
 
 class HttpRequest(NamedTuple):

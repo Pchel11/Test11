@@ -1,12 +1,10 @@
-import consts
-import custom_types
-import utils
+from old import consts, utils, custom_types
 
 
 def render_hello_page(
-        request: custom_types.HttpRequest,
-        new_user: custom_types.User,
-        saved_user: custom_types.User,
+    request: custom_types.HttpRequest,
+    new_user: custom_types.User,
+    saved_user: custom_types.User,
 ) -> str:
     css_class_for_name = css_class_for_age = ""
     label_for_name = "Your name: "
@@ -38,7 +36,7 @@ def render_hello_page(
         "label_for_age": label_for_age,
         "label_for_name": label_for_name,
         "name_new": name_new or "",
-        "name_saved": name_saved or "anonymus",
+        "name_saved": name_saved or "anonymous",
         "class_for_age": css_class_for_age,
         "class_for_name": css_class_for_name,
         "year": year,

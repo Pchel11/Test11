@@ -3,16 +3,11 @@ import os
 from datetime import date
 from http import cookies
 from pathlib import Path
-from typing import AnyStr
-from typing import Dict
-from typing import Optional
+from typing import AnyStr, Dict, Optional
 
-import settings
-from consts import DEFAULT_THEME
-from consts import SESSION_AGE
-from consts import SESSION_COOKIE
-from consts import THEMES
-from errors import NotFound
+from old import settings
+from old.consts import DEFAULT_THEME, SESSION_AGE, SESSION_COOKIE, THEMES
+from old.errors import NotFound
 
 
 def to_bytes(text: AnyStr) -> bytes:

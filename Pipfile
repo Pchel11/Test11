@@ -11,6 +11,8 @@ django = "*"
 pytest = "*"
 selenium = "*"
 ipython = "*"
+isort = "*"
+black = "*"
 
 [requires]
 python_version = "3.8"
