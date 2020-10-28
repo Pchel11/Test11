@@ -1,8 +1,8 @@
 from django.urls import path
 
 from applications.hello.apps import HelloConfig
-from applications.hello.views.greet import GreetView
-from applications.hello.views.reset import ResetView
+from applications.hello.views import GreetView
+from applications.hello.views import ResetView
 
 app_name = HelloConfig.label
 

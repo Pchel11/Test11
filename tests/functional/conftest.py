@@ -14,6 +14,6 @@ def browser():
 
 @pytest.yield_fixture(scope="session", autouse=True)
 def main_css():
-    path = settings.STATIC_DIR / "styles" / "style.css"
+    path = settings.STATIC_DIR / "styles" / "main.css"
     with path.open("r") as src:
         yield src.read()

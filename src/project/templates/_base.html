@@ -1,0 +1,18 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Z33 :: {% block title %}{% endblock %}</title>
+  <link href="{% static 'styles/main.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'images/logo.svg' %}" rel="shortcut icon" type="image/svg+xml">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header>
+<h1>PchelApp</h1>
+</header>
+<main>
+  {% block main %}{% endblock %}
+</main>
+</body>
+</html>

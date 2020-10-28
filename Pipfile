@@ -4,15 +4,27 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+astpretty = "*"
+black = "==20.8b1"
 httpie = "*"
-
-[packages]
-django = "*"
-pytest = "*"
-selenium = "*"
 ipython = "*"
 isort = "*"
-black = "*"
+pudb = "*"
+pydevd-pycharm = "*"
+pytest = "*"
+pytest-mock = "*"
+pytest-selenium = "*"
+
+[packages]
+delorean = "*"
+dj-database-url = "*"
+django = "*"
+dynaconf = {extras = ["yaml"], version = "*"}
+gunicorn = "*"
+jinja2 = "*"
+psycopg2-binary = "*"
+sentry-sdk = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"

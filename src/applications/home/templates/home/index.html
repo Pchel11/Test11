@@ -1,9 +1,18 @@
+{% extends "_base.html" %}
+
+
 {% load static %}
+
+
+{% block title%}Home Page{% endblock %}
+
+
+{% block main %}
 <html>
  		<head>
 			<title>PchelApp</title>
 			<link href="{% static 'styles/theme_dark.css' %}" rel="stylesheet" type="text/css">
-			 <link rel="shortcut icon" href="/i/favicon.ico" type="image/x-icon">
+			<link href="{% static 'images/favicon.ico' %}" type="image/x-icon">
  		</head>
  		<body>
 		<header>
@@ -11,20 +20,11 @@
 				<h1>MyFirstProject</h1>
 			</div>
 		</header>
-	<div class="knopka_rules">
-				<a href="https://t.me/Pchel11" class="knopka_rules">My Telega</a>
-	</div>
 		<div class="knopka_VK">
 			<a href="https://vk.com/pchel99" class="knopka_VK">My VK</a>
 		</div>
-	<div class="knopka_BG">
-			<a href="/i/back.jpg" class="knopka_BG">Background image</a>
-		</div>
 		<div class="knopka_logo">
-			<a href="/i/logo.svg" class="knopka_logo">Logo image</a>
-		</div>
-		<div class="knopka_error404">
-			<a href="/error" class="knopka_error404">Error404</a>
+			<a href="{% url static 'images/logo.svg' %}" class="knopka_logo">Logo image</a>
 		</div>
 		<div class="knopka_hello">
 			<a href="{% url "hello:index" %}" class="knopka_hello">Great</a>
@@ -32,4 +32,5 @@
 		</body>
  	</html>
 
- 
+
+{% endblock %}

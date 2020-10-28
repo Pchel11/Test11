@@ -6,7 +6,7 @@ def test_html(browser):
     browser.get("https://firstapppchel.herokuapp.com/")
     assert "PchelApp" in browser.title
     assert "VK" in browser.page_source
-    assert "/s/style.css" in browser.page_source
+    assert "/s/main.css" in browser.page_source
     assert "/i/back.jpg/" in browser.page_source
 
 

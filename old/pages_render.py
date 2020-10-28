@@ -29,7 +29,7 @@ def render_hello_page(
 
     theme = utils.load_theme(request.session)
     year, era = utils.year_calc(age_saved)
-    template = utils.read_static("hello.html").decode()
+    template = utils.read_static("index.html").decode()
 
     context = {
         "age_new": age_new or "",

@@ -1,3 +1,4 @@
+.secrets.yml
 .idea/
 .pytest_cache
 **/artifacts/*.html
