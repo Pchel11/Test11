@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+
+
+{% load static %}
+
+
+{% block title %}Blog{% endblock %}
+
+{% block head %}
+  <link href="{% static 'styles/dark_blog.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block main %}
+  <h1>BLOG</h1>
+  {% for obj in object_list %}
+<div class = "post">
+  <div class = "element">
+    <div class ="title">
+      <p>{{ obj.title }}</p>
+    </div>
+    <div class = "content">
+      <p>{{ obj.content }}</p>
+    </div>
+    </div>
+    </div>
+  {% endfor %}
+{% endblock %}

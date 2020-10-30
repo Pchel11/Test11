@@ -1,7 +1,7 @@
 default:
   ALLOWED_HOSTS: [ ]
   DATABASE_URL: ""
-  DEBUG: false
+  DEBUG: true
   DIRS_EXCLUDED:
     - .idea
     - .pytest_cache

@@ -3,18 +3,18 @@
   --padding-top: 30px;
 }
 
-body {
-  background-color: #a1f2f5;
-  position: absolute;
-  left: 10;
-  font-size: larger;
-}
-
 #reset-button-id {
   padding-right: 132px;
   padding-left: 132px;
   text-align: center;
 }
+
+#greet-button-id {
+  padding-right: 132px;
+  padding-left: 132px;
+  text-align: center;
+}
+
 .g {
   display: grid;
   grid-column-gap: 0.2rem;

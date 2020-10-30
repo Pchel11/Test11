@@ -1,0 +1,16 @@
+.content {
+    background: #27675b;
+    margin-left: 25px;
+    padding: 20px 20px;
+    text-align: left;
+    border-bottom: 25px solid #8dd4ce;
+    max-width: 500px;
+    word-wrap: break-word;
+}
+
+.title {
+    margin-left: 25px;
+    background: #dda1f5;
+    padding: 20px;
+    max-width: 500px;
+}
