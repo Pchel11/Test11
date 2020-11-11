@@ -16,11 +16,11 @@ a.knopka_VK {
   user-select: none;
   padding: .5em 2em;
   outline: none;
-  border: 2px solid;
+  border: 3px solid;
   border-radius: 10px;
   transition: 0.2s;
 }
-a.knopka_VK:hover { border: 4px solid; }
+a.knopka_VK:hover { border: 3px solid #dda1f5; }
 a.knopka_VK:active { background: grey; }
 
 
@@ -37,11 +37,11 @@ a.knopka_hello {
   user-select: none;
   padding: .5em 2em;
   outline: none;
-  border: 2px solid;
+  border: 3px solid;
   border-radius: 10px;
   transition: 0.2s;
 }
-a.knopka_hello:hover { border: 4px solid; }
+a.knopka_hello:hover { border: 3px solid #dda1f5; }
 a.knopka_hello:active { background: grey; }
 
 
@@ -58,11 +58,11 @@ a.knopka_Admin {
   user-select: none;
   padding: .5em 2em;
   outline: none;
-  border: 2px solid;
+  border: 3px solid;
   border-radius: 10px;
   transition: 0.2s;
 }
-a.knopka_Admin:hover { border: 4px solid; }
+a.knopka_Admin:hover { border: 3px solid #dda1f5; }
 a.knopka_Admin:active { background: grey; }
 
 
@@ -79,11 +79,11 @@ a.knopka_blog {
   user-select: none;
   padding: .5em 2em;
   outline: none;
-  border: 2px solid;
+  border: 3px solid;
   border-radius: 10px;
   transition: 0.2s;
 }
-a.knopka_blog:hover { border: 4px solid; }
+a.knopka_blog:hover { border: 3px solid #dda1f5;; }
 a.knopka_blog:active { background: grey; }
 
 
@@ -100,11 +100,11 @@ a.knopka_home {
   user-select: none;
   padding: .5em 2em;
   outline: none;
-  border: 2px solid;
+  border: 3px solid;
   border-radius: 10px;
   transition: 0.2s;
 }
-a.knopka_home:hover { border: 4px solid; }
+a.knopka_home:hover { border: 3px solid #dda1f5; }
 a.knopka_home:active { background: grey; }
 
 

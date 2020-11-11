@@ -13,16 +13,30 @@
 
 {% block main %}
   <h1>BLOG</h1>
-  {% for obj in object_list %}
+{% for obj in object_list %}
 <div class = "post">
-  <div class = "element">
+
     <div class ="title">
       <p>{{ obj.title }}</p>
     </div>
+
     <div class = "content">
       <p>{{ obj.content }}</p>
     </div>
+
+    <div class = "created_at">
+      <p>{{ obj.created_at }}</p>
     </div>
-    </div>
-  {% endfor %}
+
+    <p><a href="{% url 'blog:update-post' obj.pk %}">[update]</a> </p>
+    <p><a href="{% url 'blog:delete-post' obj.pk %}">[delete]</a> </p>
+
+</div>
+
+{% endfor %}
+
+<div class="new_post">
+    <a href="{% url "blog:new-post" %}" class="new_post">New Post</a>
+</div>
+
 {% endblock %}

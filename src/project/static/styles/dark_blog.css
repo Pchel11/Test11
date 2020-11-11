@@ -3,7 +3,6 @@
     margin-left: 25px;
     padding: 20px 20px;
     text-align: left;
-    border-bottom: 25px solid #8dd4ce;
     max-width: 500px;
     word-wrap: break-word;
 }
@@ -14,3 +13,30 @@
     padding: 20px;
     max-width: 500px;
 }
+
+.post {
+    padding-top: 25px;
+}
+
+a.new_post {
+  position: fixed;
+  top: 150px;
+  right: 30px;
+  background: #27675b;
+  width: 150px;
+  text-align:center;
+  height:40px;
+  font-size: 30px;
+  display: inline-block;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 3px solid;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+a.new_post:hover { border: 3px solid #dda1f5; }
+a.new_post:active { background: grey; }

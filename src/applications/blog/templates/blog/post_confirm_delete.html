@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+
+
+{% load static %}
+
+
+{% block title %}delete_post{% endblock %}
+
+{% block head %}
+  <link href="{% static 'styles/dark_blog.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block main %}
+  <h1>BLOG</h1>
+<p>ARE YOU SURE YOU WANT TO DELETE THIS POST?</p>
+
+
+<div class = "post">
+
+    <div class ="title">
+        <p>{{ object.title }}</p>
+    </div>
+
+    <div class = "content">
+        <p>{{ object.content }}</p>
+    </div>
+
+    <div class = "created_at">
+        <p>{{ object.created_at }}</p>
+    </div>
+
+</div>
+
+<form action="{% url 'blog:delete-post' object.pk %}" method="post">
+
+    <button type="submit">Yes, delete</button>
+
+{% csrf_token %}
+</form>
+
+{% endblock %}
