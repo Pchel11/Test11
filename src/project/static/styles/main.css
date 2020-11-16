@@ -3,9 +3,13 @@ body {
 	z-index: 1;
 }
 
+.buttons-grid-template{
+  width: auto;
+}
+
 a.knopka_VK {
   background: #27675b;
-  width: 150px;
+  width: auto;
   text-align:center;
   height:40px;
   font-size: 30px;
@@ -26,7 +30,7 @@ a.knopka_VK:active { background: grey; }
 
 a.knopka_hello {
   background: #27675b;
-  width:150px;
+  width: auto;
   text-align:center;
   height:40px;
   font-size: 30px;
@@ -47,7 +51,7 @@ a.knopka_hello:active { background: grey; }
 
 a.knopka_Admin {
   background: #27675b;
-  width:150px;
+  width:auto;
   text-align:center;
   height:40px;
   font-size: 30px;
@@ -68,7 +72,7 @@ a.knopka_Admin:active { background: grey; }
 
 a.knopka_blog {
   background: #27675b;
-  width:150px;
+  width:auto;
   text-align:center;
   height:40px;
   font-size: 30px;
@@ -89,7 +93,7 @@ a.knopka_blog:active { background: grey; }
 
 a.knopka_home {
   background: #27675b;
-  width:150px;
+  width:auto;
   text-align:center;
   height:40px;
   font-size: 30px;
@@ -108,12 +112,33 @@ a.knopka_home:hover { border: 3px solid #dda1f5; }
 a.knopka_home:active { background: grey; }
 
 
+a.knopka_bots {
+  background: #27675b;
+  width:auto;
+  text-align:center;
+  height:40px;
+  font-size: 30px;
+  display: inline-block;
+  color: white;
+  font-weight: 700;
+  text-decoration: none;
+  user-select: none;
+  padding: .5em 2em;
+  outline: none;
+  border: 3px solid;
+  border-radius: 10px;
+  transition: 0.2s;
+}
+a.knopka_bots:hover { border: 3px solid #dda1f5; }
+a.knopka_bots:active { background: grey; }
+
+
 .buttons-grid-template {
   display: grid;
   grid-gap: 5px;
   grid-template:
-    "home admin hello blog vk" auto
-    "gi-empty-11 gi-empty-12 gi-empty-13 gi-empty-14 gi-empty-15" auto
-    "gi-empty-21 gi-empty-22 gi-empty-23 gi-empty-24 gi-empty-25" auto
-    "gi-empty-31 gi-empty-32 gi-empty-33 gi-empty-34 gi-empty-35" auto
+    "home admin hello blog vk bots" auto
+    "gi-empty-11 gi-empty-12 gi-empty-13 gi-empty-14 gi-empty-15 gi-empty-16" auto
+    "gi-empty-21 gi-empty-22 gi-empty-23 gi-empty-24 gi-empty-25 gi-empty-26" auto
+    "gi-empty-31 gi-empty-32 gi-empty-33 gi-empty-34 gi-empty-35 gi-empty-36" auto
 }

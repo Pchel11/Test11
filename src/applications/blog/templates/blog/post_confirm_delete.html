@@ -39,4 +39,11 @@
 {% csrf_token %}
 </form>
 
+<form action="{% url 'blog:index' %}" method="get">
+
+    <button type="submit">fuck go back</button>
+
+{% csrf_token %}
+</form>
+
 {% endblock %}

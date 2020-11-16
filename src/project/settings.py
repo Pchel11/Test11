@@ -12,6 +12,10 @@ PROJECT_DIR = BASE_DIR / "project"
 
 SECRET_KEY = _ds.SECRET_KEY
 
+TG_BOT_TOKEN = _ds.TG_BOT_TOKEN
+
+HOST = _ds.HOST
+
 ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
@@ -21,10 +25,11 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # -------------------------
+    # --------------------------------
     "applications.hello.apps.HelloConfig",
     "applications.home.apps.HomeConfig",
     "applications.blog.apps.BlogConfig",
+    "applications.bots.apps.BotsConfig",
 ]
 
 MIDDLEWARE = [
