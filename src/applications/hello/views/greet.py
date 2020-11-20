@@ -1,12 +1,13 @@
 from datetime import date
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 
 from applications.hello.forms import HelloForm
 
 
-class GreetView(FormView):
+class GreetView(LoginRequiredMixin, FormView):
     form_class = HelloForm
     success_url = reverse_lazy("hello:index")
     template_name = "hello/hello.html"

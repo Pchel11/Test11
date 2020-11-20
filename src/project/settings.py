@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import dj_database_url
+from django.urls import reverse_lazy
 from dynaconf import settings as _ds
 
 DEBUG = _ds.DEBUG
@@ -14,22 +15,27 @@ SECRET_KEY = _ds.SECRET_KEY
 
 TG_BOT_TOKEN = _ds.TG_BOT_TOKEN
 
+LOGIN_REDIRECT_URL = '/'
+
+# LOGOUT_URL = reverse_lazy("logout")
+
 HOST = _ds.HOST
 
 ALLOWED_HOSTS = _ds.ALLOWED_HOSTS + ["localhost", "127.0.0.1"]
 
 INSTALLED_APPS = [
+    "applications.hello.apps.HelloConfig",
+    "applications.home.apps.HomeConfig",
+    "applications.blog.apps.BlogConfig",
+    "applications.bots.apps.BotsConfig",
+    "applications.account.apps.AccountConfig",
+    # ----------------------------------------------------
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # --------------------------------
-    "applications.hello.apps.HelloConfig",
-    "applications.home.apps.HomeConfig",
-    "applications.blog.apps.BlogConfig",
-    "applications.bots.apps.BotsConfig",
 ]
 
 MIDDLEWARE = [

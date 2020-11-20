@@ -32,8 +32,21 @@
 </div>
   </nav>
 </header>
+
+   {% if user.is_authenticated %}
+     <p1>User: {{ user.get_username }}</p1>
+     	<div class="logout">
+			<a href="{% url "account:logout" %}?next={{request.path}}" class="knopka_logout" style="grid-area: vk">Logout</a>
+		</div>
+   {% else %}
+		<div class="login">
+			<a href="{% url "account:login" %}?next={{request.path}}" class="knopka_login" style="grid-area: vk">Login</a>
+		</div>
+   {% endif %}
+
 <main>
   {% block main %}{% endblock %}
+  {% block content %}{% endblock %}
 </main>
 </body>
 </html>

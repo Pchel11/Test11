@@ -9,7 +9,7 @@ from django.views import View
 
 from applications.blog.models import Post
 from applications.bots.apis import TG_API
-from project import settings
+from django.conf import settings
 
 
 class ChatT(NamedTuple):
@@ -20,6 +20,7 @@ class MessageT(NamedTuple):
     id: str
     text: str
     chat: ChatT
+    username: str
 
 
 class TelegramBotView(View):
@@ -33,8 +34,10 @@ class TelegramBotView(View):
         chat = message["chat"]
         chat_id = chat["id"]
 
+        username: str = chat["username"]
+
         chat = ChatT(id=chat_id)
-        message = MessageT(chat=chat, id=message_id, text=text)
+        message = MessageT(chat=chat, id=message_id, text=text, username=username)
 
         return message
 
@@ -59,21 +62,22 @@ class TelegramBotView(View):
 
             self._send_message_to_user(message.chat.id, reply)
 
+            self.blog_post(_request)
+
         finally:
             return HttpResponse(content="")
 
     def blog_post(self, _request: HttpRequest):
-        try:
-            message = self.receive_message_from_user()
 
-            content_rec = Post(content=message)
-            title_rec = Post(title="TG")
+        message = self.receive_message_from_user()
 
-            title_rec.save()
-            content_rec.save()
+        content_rec = message.text.rsplit(sep=";;")[0]
+        title_rec = message.text.rsplit(sep=";;")[1]
+        author = message.username
 
-        finally:
-            return HttpResponse(content="")
+        f = Post.objects.create(title=title_rec, content=content_rec, author=author)
+
+        f.save()
 
     @staticmethod
     def register(_request: HttpRequest):

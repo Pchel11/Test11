@@ -6,11 +6,13 @@ created_at_default = now().datetime
 
 
 class Post(models.Model):
+
     # xxx = models.TextField(unique=True)
-    title = models.CharField(unique=False, max_length=100)
+    title = models.CharField(null=False, default="xxx", max_length=1000)
     content = models.CharField(null=True, blank=True, max_length=5000)
     created_at = models.DateTimeField(default=created_at_default)
     visible = models.BooleanField(default=True)
+    author = models.CharField(max_length=100, null=False, default="test")
 
     def get_absolute_url(self):
         return reverse_lazy("blog:post", kwargs={"pk": self.pk})

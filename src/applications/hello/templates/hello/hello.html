@@ -13,7 +13,6 @@
 
 
 {% block main %}
-
   <form action="/theme" method="post">
     <button type="submit">Switch theme</button>
   </form>
@@ -42,13 +41,12 @@
       {% csrf_token %}
     </form>
     <form action="{% url "hello:reset" %}" method="post">
+    {% csrf_token %}
       <div class="form-grid">
         <div class="form-field">
           <button id="reset-button-id" type="submit">Reset</button>
         </div>
       </div>
-      {% csrf_token %}
     </form>
   </div>
-
 {% endblock %}
