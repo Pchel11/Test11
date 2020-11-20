@@ -1,0 +1,42 @@
+{% extends "_base.html" %}
+
+
+{% load static %}
+
+
+{% block title %}Blog{% endblock %}
+
+{% block head %}
+  <link href="{% static 'styles/dark_blog.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+
+{% block main %}
+  <h1>BLOG</h1>
+
+    {% for obj in object_list %}
+    <div class = "post">
+
+        <div class ="title">
+          <p>{{ obj.title }}</p>
+        </div>
+
+        <div class = "content">
+          <p>{{ obj.content }}</p>
+        </div>
+
+        <div class = "created_at">
+          <p>{{ obj.created_at }}</p>
+        </div>
+
+        <p><a href="{% url 'blog:update-post' obj.pk %}">[update]</a> </p>
+        <p><a href="{% url 'blog:delete-post' obj.pk %}">[delete]</a> </p>
+        {% endfor %}
+    </div>
+
+
+<div class="new_post">
+    <a href="{% url "blog:new-post" %}" class="new_post">New Post</a>
+</div>
+
+{% endblock %}

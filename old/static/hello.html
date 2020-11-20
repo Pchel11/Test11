@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>PchelApp</title>
+    <link href="/hello/style" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+<h1>Hello {name_saved}!</h1>
+<h1>You were born in {year} {era}!</h1>
+
+<div class="f">
+    <form action="/hello/update" method="post">
+        <div class="g">
+            <label class="{class_for_name}" for="name-id" style="grid-area: gi-name-label">{label_for_name}</label>
+            <input id="name-id" name="name" style="grid-area: gi-name-input" type="text" value="{name_new}">
+
+            <label class="{class_for_age}" for="age-id" style="grid-area: gi-age-label">{label_for_age}</label>
+            <input id="age-id" name="age" style="grid-area: gi-age-input" type="text" value="{age_new}">
+
+            <button id="greet-button-id" style="grid-area: gi-submit" type="submit">Greet</button>
+        </div>
+    </form>
+    <form action="/hello/reset" method="post">
+        <button id="reset-button-id" style="grid-area: gi-submit_rst" type="submit">Reset</button>
+    </form>
+    <form action="/theme" method="post">
+        <button id="style-button-id" style="grid-area: gi-submit_style" type="submit">Day/Night</button>
+    </form>
+</div>
+</body>
+</html>

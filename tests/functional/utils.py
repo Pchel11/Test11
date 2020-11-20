@@ -3,7 +3,7 @@ from functools import wraps
 
 from selenium import webdriver
 
-import settings
+from old import settings
 
 
 def build_chrome():

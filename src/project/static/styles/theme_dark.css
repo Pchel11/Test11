@@ -1,0 +1,36 @@
+:root {
+  --padding-left: 30px;
+  --padding-top: 30px;
+}
+
+#reset-button-id {
+  width: 210px;
+  text-align: center;
+}
+
+#greet-button-id {
+  width: 210px;
+  text-align: center;
+}
+
+.g {
+  display: grid;
+  grid-column-gap: 0.2rem;
+  grid-row-gap: 1rem;
+  grid-template-areas:
+    "gi-name-label  gi-name-label"
+    "gi-name-input  gi-empty-12"
+    "gi-empty-21    gi-empty-22"
+    "gi-age-label   gi-age-label"
+    "gi-age-input   gi-empty-32"
+    "gi-empty-41    gi-empty-42"
+    "gi-submit      gi-empty-52"
+    "gi-submit_rst  gi-empty-62";
+}
+
+.error {
+  background-color: #d61b1b;
+  color: white;
+  font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
+  padding: 1rem;
+}

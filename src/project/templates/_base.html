@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PchelApp :: {% block title %}{% endblock %}</title>
+  <link href="{% static 'styles/main.css' %}" rel="stylesheet" type="text/css">
+  <link href="{% static 'images/favicon.ico' %}" rel="shortcut icon" type="image/x-icon">
+  {% block head %}{% endblock %}
+</head>
+<body>
+<header>
+  <nav>
+  <div class="buttons-grid-template">
+	<div class="home">
+		<a href="/" class="knopka_home" style="grid-area: home">HOME</a>
+	</div>
+	<div class="admin">
+		<a href="{% url "admin:index" %}" class="knopka_Admin">Admin</a>
+	</div>
+	<div class="hello">
+		<a href="{% url "hello:index" %}" class="knopka_hello">Hello</a>
+	</div>
+	<div class="blog">
+		<a href="{% url "blog:index" %}" class="knopka_blog" style="grid-area: blog">Blog</a>
+	</div>
+	<div class="vk">
+		<a href="https://vk.com/pchel99" class="knopka_VK" style="grid-area: vk">My VK</a>
+	</div>
+	<div class="bots">
+		<a href="{% url "bots:index" %}" class="knopka_bots" style="grid-area: vk">Bots</a>
+	</div>
+</div>
+  </nav>
+</header>
+
+   {% if user.is_authenticated %}
+     <p1>User: {{ user.get_username }}</p1>
+     	<div class="logout">
+			<a href="{% url "account:logout" %}?next={{request.path}}" class="knopka_logout" style="grid-area: vk">Logout</a>
+		</div>
+   {% else %}
+		<div class="login">
+			<a href="{% url "account:login" %}?next={{request.path}}" class="knopka_login" style="grid-area: vk">Login</a>
+		</div>
+   {% endif %}
+
+<main>
+  {% block main %}{% endblock %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>
